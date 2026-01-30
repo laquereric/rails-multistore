@@ -5,9 +5,9 @@ require_relative "lib/rails_multistore/version"
 Gem::Specification.new do |spec|
   spec.name        = "rails-multistore"
   spec.version     = RailsMultistore::VERSION
-  spec.authors     = ["Your Name"]
-  spec.email       = ["your.email@example.com"]
-  spec.homepage    = "https://github.com/your-username/rails-multistore"
+  spec.authors     = ["Eric Laquer"]
+  spec.email       = ["eric@laquer.com"]
+  spec.homepage    = "https://github.com/laquereric/rails-multistore"
   spec.summary     = "Unified interface for managing multiple data stores in Rails"
   spec.description = "Rails Multistore provides a unified interface for pushing data to and querying from multiple data stores simultaneously. Each store type is implemented as a separate Rails engine."
   spec.license     = "MIT"

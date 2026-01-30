@@ -123,7 +123,7 @@ To add support for a new data store, you can create a new store engine gem.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/your-username/rails-multistore. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/laquereric/rails-multistore. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
