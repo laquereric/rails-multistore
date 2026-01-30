@@ -1,0 +1,61 @@
+@startuml Push Operation Sequence
+
+actor User
+participant "Article\n(Model)" as Model
+participant "PushJob" as Job
+participant "StoreRegistry" as Registry
+participant "Store1" as Store1
+participant "ElasticsearchAdapter" as ES1
+participant "Elasticsearch\nCluster 1" as ESC1
+participant "Store2" as Store2
+participant "MarkLogicAdapter" as ML
+participant "MarkLogic\nServer" as MLS
+
+User -> Model: article.multistore_push()
+activate Model
+
+alt async enabled
+  Model -> Job: perform_later(article)
+  activate Job
+  Model --> User: returns immediately
+  deactivate Model
+  
+  Job -> Registry: push(article)
+  activate Registry
+else async disabled
+  Model -> Registry: push(article)
+  activate Registry
+end
+
+Registry -> Store1: adapter.push(article)
+activate Store1
+Store1 -> ES1: push(article)
+activate ES1
+ES1 -> ESC1: HTTP POST /articles/_doc/1
+activate ESC1
+ESC1 --> ES1: 201 Created
+deactivate ESC1
+ES1 --> Store1: success
+deactivate ES1
+Store1 --> Registry: success
+deactivate Store1
+
+Registry -> Store2: adapter.push(article)
+activate Store2
+Store2 -> ML: push(article)
+activate ML
+ML -> MLS: HTTP PUT /articles/1.json
+activate MLS
+MLS --> ML: 200 OK
+deactivate MLS
+ML --> Store2: success
+deactivate ML
+Store2 --> Registry: success
+deactivate Store2
+
+Registry --> Job: success
+deactivate Registry
+Job --> User: job completed
+deactivate Job
+
+@enduml

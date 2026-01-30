@@ -1,0 +1,87 @@
+@startuml Rails Multistore Class Diagram
+
+' Core Gem Classes
+package "RailsMultistore (Core Gem)" {
+  class "ActiveRecord::Base" as ActiveRecord {
+  }
+  
+  class "RailsMultistore::Model" as Model {
+    + multistore(&block)
+    + multistore_query(query_string)
+    + multistore_push()
+  }
+  
+  class "RailsMultistore::StoreRegistry" as StoreRegistry {
+    - stores: Array<Store>
+    + store(name, options)
+    + push(record)
+    + query(query_string)
+    - handle_error(error, store_name, operation)
+  }
+  
+  class "RailsMultistore::Store" as Store {
+    + name: Symbol
+    + options: Hash
+    + adapter: Adapter
+    - load_adapter()
+  }
+  
+  class "RailsMultistore::PushJob" as PushJob {
+    + perform(record)
+  }
+  
+  class "RailsMultistore::Configuration" as Configuration {
+    + async: Boolean
+    + queue_name: Symbol
+    + error_handler: Proc
+  }
+}
+
+' Store Engine Interface
+package "Store Engine Interface" {
+  interface "Adapter" as AdapterInterface {
+    + initialize(options)
+    + push(record)
+    + query(query_string)
+  }
+}
+
+' Store Engine Implementations
+package "RailsMultistoreElasticsearch" {
+  class "ElasticsearchAdapter" as ESAdapter {
+    - client: Elasticsearch::Client
+    - options: Hash
+    + initialize(options)
+    + push(record)
+    + query(query_string)
+    - build_index_name(record)
+  }
+}
+
+package "RailsMultistoreMarklogic" {
+  class "MarkLogicAdapter" as MLAdapter {
+    + initialize(options)
+    + push(record)
+    + query(query_string)
+  }
+}
+
+package "RailsMultistoreNeighbor" {
+  class "NeighborAdapter" as NeighborAdapter {
+    + initialize(options)
+    + push(record)
+    + query(query_string)
+  }
+}
+
+' Relationships
+ActiveRecord <|-- Model : includes
+Model --> StoreRegistry : uses
+Model --> PushJob : enqueues
+StoreRegistry "1" *-- "many" Store : contains
+Store --> AdapterInterface : loads
+AdapterInterface <|.. ESAdapter : implements
+AdapterInterface <|.. MLAdapter : implements
+AdapterInterface <|.. NeighborAdapter : implements
+
+@enduml
