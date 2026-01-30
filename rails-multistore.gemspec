@@ -6,7 +6,7 @@ Gem::Specification.new do |spec|
   spec.name        = "rails-multistore"
   spec.version     = RailsMultistore::VERSION
   spec.authors     = ["Eric Laquer"]
-  spec.email       = ["eric@laquer.com"]
+  spec.email       = ["laquereric@gmail.com"]
   spec.homepage    = "https://github.com/laquereric/rails-multistore"
   spec.summary     = "Unified interface for managing multiple data stores in Rails"
   spec.description = "Rails Multistore provides a unified interface for pushing data to and querying from multiple data stores simultaneously. Each store type is implemented as a separate Rails engine."
