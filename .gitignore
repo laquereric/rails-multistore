@@ -1,0 +1,6 @@
+# OS files
+.DS_Store
+
+# Design docs and generated content (kept locally)
+other/**/*
+!other/**/.gitkeep
